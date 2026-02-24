@@ -68,7 +68,7 @@ app.get('/', async (req, res) => {
   emma@emmas-MacBook-Air worldburning %
 
 
-  ${'IS IT POETRY'.padStart(rando(80))}
+${'IS IT POETRY'.padStart(rando(80))}
 
 
   that ${noun() + ' ' + verb() + ' ' + noun() + '  &'}
