@@ -63,9 +63,13 @@ app.get('/', async (req, res) => {
 // } 
 
   
-  var preHtml =`emma@emmas-MacBook-Air worldburning %
+  var preHtml =`
 
-    IS IT POETRY
+  emma@emmas-MacBook-Air worldburning %
+
+
+      IS IT POETRY
+
 
   that ${noun() + ' ' + verb() + ' ' + noun() + '  &'}
   ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
@@ -90,10 +94,10 @@ app.get('/', async (req, res) => {
 
   res.type('html').send(`
     <!doctype html>
-    <html>
+    <html style="filter:invert(100%)">
       <head>
         <meta charset="utf-8"/>
-        <title>by emma kn</title>
+        <title>(by emma kn)</title>
       </head>
       <body>
         <main>
@@ -105,6 +109,6 @@ app.get('/', async (req, res) => {
 
 })
 
-
+app.listen(8080)
 
 export default app
