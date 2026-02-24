@@ -48,7 +48,7 @@ var data = await fetch('https://doikayt.vercel.app/api');
   }
 
 
-  var thoughts = ['and did u know I brushed my teeth today', 'and did you know the patriots lost', 'and did you know the sky is turning red', 'did you know', 'and did you know that god isn\'t dead', 'and where is my phone', 'and where did it go', '????', 'and what are your thoughts on genocide', 'and are trans people real', 'and what about antisemitism?', 'and is any of this new', 'and what is knowledge anyway', 'and is this a fungal infection', 'and what\'s your ideal way to die', 'and brexit', 'and something about blue lives', 'and are you an organ donor?', 'and do you care?', 'and did you know im so fucking high']
+  var thoughts = ['and did u know I brushed my teeth today', 'and did you know the patriots lost', 'and did you know the sky is turning red', 'did you know', 'and did you know that god isn\'t dead', 'and where is my phone', 'and where did it go', '????', 'and what are your thoughts on genocide', 'and are trans people real', 'and what about antisemitism?', 'and is any of this new', 'and what is knowledge anyway', 'and is this a fungal infection', 'and what\'s your ideal way to die', 'and brexit', 'and something about blue lives?', 'and are you an organ donor?', 'and do you care?', 'and did you know im so fucking high?']
 
 
 // Home route - HTML
