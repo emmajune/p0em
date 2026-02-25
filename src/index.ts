@@ -98,7 +98,7 @@ ${'IS IT POETRY'.padStart(rando(80))}
     <html style="filter:invert(100%)">
       <head>
         <meta charset="utf-8"/>
-        <title>p0eM by emkn</title>
+        <title>p0eM--by emjkn)</title>
       </head>
       <body>
         <main>
