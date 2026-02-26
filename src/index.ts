@@ -40,12 +40,21 @@ var data = await fetch('https://doikayt.vercel.app/api');
   var nounArr = nounArr = doc.nouns().out('array')
 
   function verb() {
+      if (!randomVerb) {
+        return 'devours'
+      }
       var randomVerb = verbArr[rando(verbArr.length-1)]
-      return randomVerb
+      randomVerb = nlp(randomVerb).verbs().toPresentTense().text()
+      return unPunct(randomVerb)
   }
   function noun() {
       var randomNoun = nounArr[rando(nounArr.length-1)]
-      return randomNoun
+      return unPunct(randomNoun)
+  }
+
+  function unPunct(str) {
+    str = str.replace(/[^a-zA-Z0-9 ]/g, '')
+    return str
   }
 
 
@@ -89,7 +98,7 @@ ${'IS IT POETRY'.padStart(rando(80))}
   ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
 
 
-        ${rando(thoughts).value.replace(/$/, '!')}
+        ${rando(thoughts).value}
         
   `
 
@@ -98,11 +107,11 @@ ${'IS IT POETRY'.padStart(rando(80))}
     <html style="filter:invert(100%)">
       <head>
         <meta charset="utf-8"/>
-        <title>p0eM--by emjkn</title>
+        <title>IS IT POETRY</title>
       </head>
       <body>
         <main>
-          <pre>${preHtml}</pre>
+          <pre>${preHtml.replaceAll('.','-')}</pre>
         </main>
       </body>
     </html>

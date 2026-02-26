@@ -4,7 +4,8 @@
   "dependencies": {
     "@nastyox/rando.js": "^2.0.6",
     "compromise": "^14.14.5",
-    "express": "5.1.0"
+    "express": "5.1.0",
+    "wink-pos-tagger": "^2.2.2"
   },
   "devDependencies": {
     "@types/express": "5.0.0",
