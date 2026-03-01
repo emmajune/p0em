@@ -14,23 +14,17 @@ const app = express()
 var data = await fetch('https://doikayt.vercel.app/api');
   var obj = await data.json();
   var objArr = Object.values(obj).flat(2);
-  var sentences = [];
+  var wordsoup:string = '';
   for (let i = 0; i < objArr.length; i++) {
     // @ts-ignore
-      let desc = objArr[i]?.description;
+      let desc:string = objArr[i]?.description;
       if (!desc) {
           continue;
       }
-      if (desc.includes('...')) {
-          continue;
-      } 
-      let sentence = Array.isArray(desc.split('.')) ? desc.split('. ')[0]+'.' : desc;
-      sentences.push(sentence);
+      wordsoup += desc;
   }
 
-  var paragraph = sentences.join(' ').toLowerCase()
-
-  var doc = nlp(paragraph)
+  var doc = nlp(wordsoup)
 
   doc.normalize('medium')
 
@@ -40,11 +34,12 @@ var data = await fetch('https://doikayt.vercel.app/api');
   var nounArr = nounArr = doc.nouns().out('array')
 
   function verb() {
-      if (!randomVerb) {
-        return 'devours'
-      }
+      
       var randomVerb = verbArr[rando(verbArr.length-1)]
       randomVerb = nlp(randomVerb).verbs().toPresentTense().text()
+      if (!randomVerb) {
+          return '<sup>devour</sup><sub>consumes</sub>'
+        }
       return unPunct(randomVerb)
   }
   function noun() {
@@ -58,7 +53,7 @@ var data = await fetch('https://doikayt.vercel.app/api');
   }
 
 
-  var thoughts = ['and did u know I brushed my teeth today', 'and did you know the patriots lost', 'and did you know the sky is turning red', 'did you know', 'and did you know that god isn\'t dead', 'and where is my phone', 'and where did it go', '????', 'and what are your thoughts on genocide', 'and are trans people real', 'and what about antisemitism?', 'and is any of this new', 'and what is knowledge anyway', 'is this a fungal infection', 'and what\'s your ideal way to die', 'and brexit', 'something about blue lives?', 'and are you an organ donor?', 'and do you care?', 'and did you know im really high?']
+  var thoughts = ['and did u know I brushed my teeth today', 'and did you know the patriots lost', 'and did you know the sky is turning red', 'did you know', 'and did you know that god isn\'t dead', 'and where is my phone', 'and where did it go', '????', 'and what are your thoughts on genocide', 'and are trans people real', 'and what about antisemitism?', 'and is any of this new', 'and what is knowledge anyway', 'are we a fungal infection?', 'and what\'s your ideal way to die', 'and brexit', 'something about blue lives?', 'and are you an organ donor?', 'and do you care?', 'and did you know im really high?', 'i wish i understood proper nouns']
 
 
 // Home route - HTML
@@ -75,11 +70,10 @@ app.get('/', async (req, res) => {
   
   var preHtml =`
 
-  emma@emmas-MacBook-Air worldburning %
+      emma@emmas-MacBook-Air <em>making_headli(n)es</em> %
 
 
-${'IS IT POETRY'.padStart(rando(80))}
-
+  ${'IS IT POETRY'.padStart(rando(70)+30)}
 
   that ${noun() + ' ' + verb() + ' ' + noun() + '  &'}
   ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
@@ -97,22 +91,18 @@ ${'IS IT POETRY'.padStart(rando(80))}
   ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
   ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
 
-
-        ${rando(thoughts).value}
+  ${rando(thoughts).value.padStart(rando(60)+30)}
         
   `
 
   res.type('html').send(`
-    <!doctype html>
-    <html style="filter:invert(100%)">
+    <html style="filter:invert(100%);hue-rotate(180deg)">
       <head>
-        <meta charset="utf-8"/>
-        <title>IS IT POETRY</title>
+        <title>*making_headli(n)es*</title>
       </head>
       <body>
-        <main>
           <pre>${preHtml.replaceAll('.','-')}</pre>
-        </main>
+        <button onclick="alert('HI')" style="display:inline;padding:0;margin:0;background-color:transparent;border:none;position:absolute;select:none;bottom:0;right:0;font-family:monospace">?</button>
       </body>
     </html>
   `)
