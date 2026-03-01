@@ -94,6 +94,7 @@ app.get('/', async (req, res) => {
   ${rando(thoughts).value.padStart(rando(60)+30)}
         
   `
+  res.set('Cache-Control', 'max-age=60, stale-while-revalidate=999999999999999999999999999999999999999999999999999999999999999999999999')
 
   res.type('html').send(`
     <html style="filter:invert(100%);hue-rotate(180deg)">
@@ -102,7 +103,7 @@ app.get('/', async (req, res) => {
       </head>
       <body>
           <pre>${preHtml.replaceAll('.','-')}</pre>
-        <button onclick="alert('HI')" style="display:inline;padding:0;margin:0;background-color:transparent;border:none;position:absolute;select:none;bottom:0;right:0;font-family:monospace">?</button>
+        <button style="display:inline;padding:0;margin:0;background-color:transparent;border:none;position:absolute;select:none;bottom:0;right:0;font-family:monospace">?</button>
       </body>
     </html>
   `)
