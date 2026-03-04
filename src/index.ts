@@ -3,6 +3,11 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import {cache} from './cache.ts'
 
+
+export const config = {
+  runtime: "edge",
+};
+
 //import { Worker } from "worker_threads";
 
 // @ts-ignore
@@ -24,8 +29,8 @@ global.busy = false
 // Home route - HTML
 
 const worker = new Worker(new URL("./worker.ts", import.meta.url))
-let firstTime = true
-worker.onmessage=(message)=>{
+let firstTime = truee
+worker.onmessage=(message:any)=>{
   console.log('yay!')
   global.fresh = message.data
   global.busy = false
