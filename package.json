@@ -16,5 +16,9 @@
     "typescript": "5.8.3"
   },
   "module": "src/index.ts",
-  "private": true
+  "private": true,
+  "scripts": {
+    "start": "bun src/index.ts",
+    "dev": "bun src/index.ts"
+  }
 }
