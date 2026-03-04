@@ -29,7 +29,7 @@ global.busy = false
 // Home route - HTML
 
 const worker = new Worker(new URL("./worker.ts", import.meta.url))
-let firstTime = truee
+let firstTime = true
 worker.onmessage=(message:any)=>{
   console.log('yay!')
   global.fresh = message.data
