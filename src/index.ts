@@ -1,115 +1,65 @@
 import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import nlp from 'compromise'
-import {rando} from '@nastyox/rando.js'
+import {cache} from './cache.ts'
 
+import { Worker } from "worker_threads";
 
-const __filename = fileURLToPath(import.meta.url)
+// @ts-ignore
+declare global {
+  var fresh: any;
+  var verbArr: [];
+  var nounArr: [];
+  var busy: boolean
+}
+
+console.log(JSON.stringify(process.env.NEOCITIES_SITE))
+
 //const __dirname = path.dirname(__filename)
 
 const app = express()
 
-
-var data = await fetch('https://doikayt.vercel.app/api');
-  var obj = await data.json();
-  var objArr = Object.values(obj).flat(2);
-  var wordsoup:string = '';
-  for (let i = 0; i < objArr.length; i++) {
-    // @ts-ignore
-      let desc:string = objArr[i]?.description;
-      if (!desc) {
-          continue;
-      }
-      wordsoup += desc;
-  }
-
-  var doc = nlp(wordsoup)
-
-  doc.normalize('medium')
-
-  doc.unique()
-
-  var verbArr = doc.verbs().out('array')
-  var nounArr = nounArr = doc.nouns().out('array')
-
-  function verb() {
-      
-      var randomVerb = verbArr[rando(verbArr.length-1)]
-      randomVerb = nlp(randomVerb).verbs().toPresentTense().text()
-      if (!randomVerb) {
-          return '<sup>devour</sup><sub>consumes</sub>'
-        }
-      return unPunct(randomVerb)
-  }
-  function noun() {
-      var randomNoun = nounArr[rando(nounArr.length-1)]
-      return unPunct(randomNoun)
-  }
-
-  function unPunct(str) {
-    str = str.replace(/[^a-zA-Z0-9 ]/g, '')
-    return str
-  }
-
-
-  var thoughts = ['and did u know I brushed my teeth today', 'and did you know the patriots lost', 'and did you know the sky is turning red', 'did you know', 'and did you know that god isn\'t dead', 'and where is my phone', 'and where did it go', '????', 'and what are your thoughts on genocide', 'and are trans people real', 'and what about antisemitism?', 'and is any of this new', 'and what is knowledge anyway', 'are we a fungal infection?', 'and what\'s your ideal way to die', 'and brexit', 'something about blue lives?', 'and are you an organ donor?', 'and do you care?', 'and did you know im really high?', 'i wish i understood proper nouns']
-
-
+global.fresh = false
+global.busy = false
 // Home route - HTML
 app.get('/', async (req, res) => {
-
-
-// function apply(str, pos, func) {
-//     var doc = nlp(str);
-//     doc = doc.normalize('heavy');
-//     doc = doc[pos+'s']()[func]();
-//     return doc
-// } 
-
-  
-  var preHtml =`
-
-      emma@emmas-MacBook-Air <em>making_headli(n)es</em> %
-
-
-  ${'IS IT POETRY'.padStart(rando(70)+30)}
-
-  that ${noun() + ' ' + verb() + ' ' + noun() + '  &'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-  ${noun() + ' ' + verb() + ' ' + noun() + '--&'}
-
-  ${rando(thoughts).value.padStart(rando(60)+30)}
-        
-  `
-  res.set('Cache-Control', 'max-age=60, stale-while-revalidate=999999999999999999999999999999999999999999999999999999999999999999999999')
-
-  res.type('html').send(`
-    <html style="filter:invert(100%);hue-rotate(180deg)">
-      <head>
-        <title>*making_headli(n)es*</title>
-      </head>
-      <body>
-          <pre>${preHtml.replaceAll('.','-')}</pre>
-        <button style="display:inline;padding:0;margin:0;background-color:transparent;border:none;position:absolute;select:none;bottom:0;right:0;font-family:monospace">?</button>
-      </body>
-    </html>
-  `)
-
-})
+  res.header({'CDN-CACHE-CONTROL':'max-age=1, state-while-revalidate=9999999999999999999999', 'CACHE-CONTROL': ' max-age=1, state-while-revalidate=9999999999999999'})
+  res.type('html')
+  await new Promise((res)=>{setTimeout(()=>res('')), 1000})
+    res.send(global.fresh ? global.fresh : await (await fetch('https://svrss.neocities.org/cache')).text())
+    res.end()
+    //if (!global.busy) {
+      worker.postMessage('refresh, please!')
+    //}
+    //genHtml()
+  })
+   app.get('/ping', (req,res)=>{
+    res.send('ping!')
+  })
 
 app.listen(8080)
 
 export default app
+
+
+
+  
+  // function apply(str, pos, func) {
+  //     var doc = nlp(str);
+  //     doc = doc.normalize('heavy');
+  //     doc = doc[pos+'s']()[func]();
+  //     return doc
+  // } 
+
+const worker = new Worker(new URL("./worker.ts", import.meta.url))
+let firstTime = true
+worker.on('message', (message)=>{
+  console.log('yay!')
+  global.fresh = message
+  global.busy = false
+  if (firstTime) {
+    cache(message)
+    firstTime = false
+  }
+})
+//worker.postMessage('!!!')
