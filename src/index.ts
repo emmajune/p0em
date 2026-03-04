@@ -33,11 +33,8 @@ app.get('/', async (req, res) => {
     //}
     //genHtml()
   })
-   app.get('/ping', (req,res)=>{
-    res.send('ping!')
-  })
 
-app.listen(8080)
+//app.listen(8080)
 
 export default app
 
