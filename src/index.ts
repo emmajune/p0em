@@ -45,7 +45,8 @@ app.get('/', async (req, res) => {
   res.header({'CDN-CACHE-CONTROL':'max-age=1, state-while-revalidate=9999999999999999999999', 'CACHE-CONTROL': ' max-age=1, state-while-revalidate=9999999999999999'})
   res.type('html')
   await new Promise((res)=>{setTimeout(()=>res('')), 1000})
-    res.send(global.fresh ? global.fresh : await (await fetch('https://svrss.neocities.org/cache')).text())
+    var html = global.fresh ? global.fresh : (await (await fetch('https://svrss.neocities.org/cache')).text())
+    res.send(html.replace('IS_FRESH', global.fresh ? 'fresh' : 'stale'))
     res.end()
     //if (!global.busy) {
       worker.postMessage('refresh, please!')

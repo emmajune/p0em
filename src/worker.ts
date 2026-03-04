@@ -126,13 +126,13 @@ that ${poem}
   `;
 
 	var html = `
-  <html style="filter:invert(100%);hue-rotate(180deg)">
+  <html>
     <head>
       <title>*making_headli(n)es*</title>
     </head>
-    <body>
+    <body style="margin:0;padding:0;width:100vw;height:100vh;filter:invert(100%);hue-rotate(180deg);background-color:black;">
         <pre>${preHtml.replaceAll('.', '-')}</pre>
-      <button style="display:inline;padding:0;margin:0;background-color:transparent;border:none;position:absolute;select:none;bottom:0;right:0;font-family:monospace">?</button>
+      <p style="display:inline;padding:0;margin:0;background-color:transparent;border:none;position:absolute;select:none;bottom:0;right:0;font-family:monospace;">IS_FRESH</p>
     </body>
   </html>
 `;
