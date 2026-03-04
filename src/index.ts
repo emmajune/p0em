@@ -3,7 +3,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import {cache} from './cache.ts'
 
-import { Worker } from "worker_threads";
+//import { Worker } from "worker_threads";
 
 // @ts-ignore
 declare global {
@@ -22,6 +22,20 @@ const app = express()
 global.fresh = false
 global.busy = false
 // Home route - HTML
+
+const worker = new Worker(new URL("./worker.ts", import.meta.url))
+let firstTime = true
+worker.onmessage=(message)=>{
+  console.log('yay!')
+  global.fresh = message.data
+  global.busy = false
+  if (firstTime) {
+    cache(message.data)
+    firstTime = false
+  }
+}
+
+
 app.get('/', async (req, res) => {
   res.header({'CDN-CACHE-CONTROL':'max-age=1, state-while-revalidate=9999999999999999999999', 'CACHE-CONTROL': ' max-age=1, state-while-revalidate=9999999999999999'})
   res.type('html')
@@ -34,9 +48,9 @@ app.get('/', async (req, res) => {
     //genHtml()
   })
 
-//app.listen(8080)
 
-export default app
+
+
 
 
 
@@ -48,15 +62,6 @@ export default app
   //     return doc
   // } 
 
-const worker = new Worker(new URL("./worker.ts", import.meta.url))
-let firstTime = true
-worker.on('message', (message)=>{
-  console.log('yay!')
-  global.fresh = message
-  global.busy = false
-  if (firstTime) {
-    cache(message)
-    firstTime = false
-  }
-})
+app.listen(8080)
 //worker.postMessage('!!!')
+export default app
