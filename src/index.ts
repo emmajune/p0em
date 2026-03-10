@@ -17,10 +17,12 @@ declare global {
 const app = express()
 
 app.get('/', async (req, res) => {
-  //res.header({'CDN-CACHE-CONTROL':'max-age=1, state-while-revalidate=9999999999999999999999', 'CACHE-CONTROL': ' max-age=1, state-while-revalidate=9999999999999999'})
+  res.header({'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Credentials': 'false'})
   res.type('html');
   var html:any = await genHtml();
-  (async function(){console.log(html)})()
   res.end(html)
   setTimeout(()=>cache(html), 1000)
 })
@@ -79,15 +81,7 @@ console.log('1/5');
 var doc = nlp(wordsoup);
 console.log('2/5');
 
-doc.normalize({
-  whitespace: true,
-  case: true,
-  punctuation: true,
-  unicode: false,
-  contractions: true,
-  acronyms: true,
-  possessives: true,
-});
+doc.normalize();
 console.log('3/5');
 
 //@ts-ignore
@@ -122,14 +116,19 @@ function poemize(str:string) {
   return str
 }
 
-const template:string = `N1 V1 N1  &
-N1 V1 N1--&
-N1 V1 N1--&
-N1 V1 N1--&
-N1 V1 N1--&
-N1 V1 N1--&
-N1 V1 N1--&
-N1 V1 N1--&`
+const template:string = ` N1 V1 V1 N1  &
+ N1 V1 N1 N1 V1--&
+ V1 V1 V1 V1 V1--&
+ N1 V1 N1 V1 N1--&
+ V1 N1 N1 V1--&
+ N1 N1--&
+ V1 N1--&
+ V1--&
+ V1 N1 N1 V1--&
+ N1 N1--&
+ V1 N1--&
+ N1 V1 N1 N1 V1 V1 V1 V1--&
+`
 
 
 
@@ -141,7 +140,7 @@ async function genHtml() {
       emma@emmas-MacBook-Air <em>making_headli(n)es</em> %
 
 
-  ${'IS IT POETRY'.padStart(rando(70) + 30)}
+  ${'IS IT POETRY'.padStart(rando(70) + 60)}
 
 that ${poem}
 
@@ -156,6 +155,14 @@ that ${poem}
     </head>
     <body style="margin:0;padding:0;width:100vw;height:100vh;filter:invert(100%);hue-rotate(180deg);background-color:black;">
         <pre>${preHtml.replaceAll('.', '-')}</pre>
+        <script>
+          async function everything() {
+            var html = await fetch("https://p0em.vercel.app")
+            console.log(html)
+          }
+          everything()
+          
+        </script>
       <button style="display:inline;padding:0;margin:0;background-color:transparent;border:none;position:absolute;select:none;bottom:0;right:0;font-family:monospace;">?</button>
     </body>
   </html>
