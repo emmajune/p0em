@@ -22,7 +22,7 @@ app.get('/', async (req, res) => {
     'Access-Control-Allow-Headers': '*',
     'Access-Control-Allow-Credentials': 'false'})
   res.type('html');
-  var html:any = await genHtml();
+  var html:any = 'await genHtml()';
   res.end(html)
   setTimeout(()=>cache(html), 1000)
 })
@@ -31,7 +31,7 @@ app.listen(8080)
 //worker.postMessage('!!!')
 export default app
 
-
+/*
 var words:any = {}
 
 var thoughts = [
@@ -189,3 +189,4 @@ that ${poem}
   //     doc = doc[pos+'s']()[func]();
   //     return doc
   // } 
+  */
